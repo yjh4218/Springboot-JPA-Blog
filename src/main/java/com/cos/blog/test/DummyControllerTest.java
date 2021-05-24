@@ -6,9 +6,11 @@ import java.util.function.Supplier;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +36,20 @@ public class DummyControllerTest {
 	//save 함수는 id를 전달하면 해당 id에 대한 데이터가 있으면 update를 진행함
 	//save 함수는 id를 전달하면 해당 id에 대한 데이터가 없으면 insert를 진행함
 	//email, password
-	@Transactional
+	
+	@DeleteMapping("/dummy/user/{id}")
+	public String deleteUser(@PathVariable int id) {
+		try {
+			userRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			// TODO: handle exception
+			return "삭제실패하였습니다. 해당 id는 DB에 없습니다.";
+		}
+				
+		return "삭제되었습니다. id : " + id;
+	}
+	
+	@Transactional //함수 종료시에 자동 commit이 됨. 함수 종료시 변경감지 하여 변경된 데이터 확인 후 수정 commit 진행 -> 더티체킹
 	@PutMapping("/dummy/user/{id}")
 	public User updateUser(@PathVariable int id,@RequestBody User requestUser) { //json 데이터를 요청 -> Java ObjectMessageConverter의 Jackson라이브러리가 변환해서 받아줌
 		System.out.println("id : " + id);
@@ -42,6 +57,7 @@ public class DummyControllerTest {
 		System.out.println("email : " + requestUser.getEmail());
 		
 		// save는 인서트에서만 사용한다.
+		// 영속화가 됨.
 		User user = userRepository.findById(id).orElseThrow(()->{
 			return new IllegalArgumentException("수정에 실패하였습니다.");
 		});
@@ -52,7 +68,7 @@ public class DummyControllerTest {
 //		userRepository.save(user); 
 		
 		//더티체킹
-		return null;
+		return user;
 	}
 	
 	
