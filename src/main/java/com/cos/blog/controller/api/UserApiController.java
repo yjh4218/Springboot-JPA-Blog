@@ -1,5 +1,7 @@
 package com.cos.blog.controller.api;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,15 +22,16 @@ public class UserApiController {
 	
 	//요청받은 데이터
 	//user.js 에서 데이터 요청이 올 경우 user.js의 user 정보를 전달 받음. 그 후 ResponseDto에 결과 값을 
-	@PostMapping("/api/user")
+	@PostMapping("/auth/joinProc")
 	public ResponseDto<Integer> save(@RequestBody User user) {//username, password, email
-		System.out.print("UserApiController에서 호출함");
+		System.out.print("UserApiController에서 save 호출함");
 		
 		user.setRole(RoleType.USER);
 		//실제로 DB에 insert하고 결과 값을 전달받음
-		int result = userService.회원가입(user);
+		userService.회원가입(user);
 		
 		//결과값을 DTO에 저장 후 user.js에 반환
-		return new ResponseDto<Integer>(HttpStatus.OK, result); //데이터 전달 될 경우 ResponseDto로 전달
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1); //데이터 전달 될 경우 ResponseDto로 전달
 	}
+	
 }
