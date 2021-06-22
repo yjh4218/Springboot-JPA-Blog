@@ -40,16 +40,16 @@ public class Board {
 	@Lob // 대용량 데이터
 	private String content; //섬머노트 라이브러리 <heml> 태그가 섞여서 디자인 됨.
 	
-	@ColumnDefault("0")
+//	@ColumnDefault("0")
 	private int count; //조회수
 	
 	//fetchType.Eager 는 select하면 무조건 가져옴
-	@ManyToOne(fetch = FetchType.EAGER) // board = Many, user = one. 한 명의 유저는 여러개의 보드를 사용 가능.
-	// board = one, user = one. 한 명의 유저는 한 개의 보드를 사용할 수 있다. 
+	@ManyToOne(fetch = FetchType.EAGER) // board = Many, user = one. 한 명의 유저는 여러개의 보드를 사용 가능. board = one, user = one. 한 명의 유저는 한 개의 보드를 사용할 수 있다. 
 	@JoinColumn(name="userId")
 	private User user; //DB는 오브젝트를 저장할 수 없다. FK, 자바는 오브젝트를 저장할 수 있다.
 	// 원래 FK 값인 int userID 를 저장해야하나, JPA에서는 객체를 사용가능 
 
+	//db에 반영 안됨. select하기 위해 존재
 	//fetchType.Lazy 는 select하면 필요시 가져옴
 	@OneToMany(mappedBy = "board",fetch = FetchType.EAGER) // 하나의 게시글은 여러개의 답변을 갖고 올 수 있음. mappedBy 는 연관관계의 주인이 아니다.(DB에 컬럼을 만들지 마세요). 조인의 데이터 저장.
 	//FK를 가지게 될 경우 원자성이 깨짐(1원칙 위배)
