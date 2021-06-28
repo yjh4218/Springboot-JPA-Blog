@@ -3,6 +3,7 @@ package com.cos.blog.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private PrincipalDetailService principalDetailService;
 	
+	
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		// TODO Auto-generated method stub
+		return super.authenticationManager();
+	}
+
 	@Bean //loc가 되요!(함수가 리턴하는 값을 스프링이 관리함
 	public BCryptPasswordEncoder encodePWD() {
 		return new BCryptPasswordEncoder();

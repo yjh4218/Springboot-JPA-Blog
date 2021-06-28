@@ -3,6 +3,9 @@ let index = {
 		$("#btn-save").on("click", ()=>{ //function(){}, ()=>{} this를 바인딩하기 위해서 function을 사용 안 함.
 			this.save();
 		});
+		$("#btn-update").on("click", ()=>{ //function(){}, ()=>{} this를 바인딩하기 위해서 function을 사용 안 함.
+			this.update();
+		});
 	},
 	
 	save:function(){
@@ -26,8 +29,37 @@ let index = {
 			contentType:"application/json; charset=utf-8", //body data가 어떤 타입인지(MIME)
 			dataType:"json" //요청을 서버로해서 응답이 왔을 때 기본적으로 모든 것이 문자열(String Buffer)인데, 만약 생긴게 json이라면 javascript 오브젝트로 변경함
 		}).done(function(resp){
-			//ㅎ
-			alert("회원 가입이 완료되었습니다.");
+			console.log(resp);
+			if(resp.status === 500){
+				alert("회원가입에 실패하였습니다.");
+			}else {
+				alert("회원 가입이 완료되었습니다.");
+				location.href ="/";
+			}
+			
+		}).fail(function(error){
+			alert(JSON.stringify(error));
+		}); 
+	},
+	
+	update:function(){
+		//alert('user의 save함수 호출됨');
+		let data={ //유저가 입력한 데이터 저장
+			id:$("#id").val(),
+			username:$("#username").val(),
+			password:$("#password").val(),
+			email:$("#email").val()
+		};
+		
+		$.ajax({
+			//회원가입 수행 요청
+			type:"PUT",
+			url:"/user", //UserApiController로 던짐(PostMapping)
+			data: JSON.stringify(data), //http body data.
+			contentType:"application/json; charset=utf-8", //body data가 어떤 타입인지(MIME)
+			dataType:"json" //요청을 서버로해서 응답이 왔을 때 기본적으로 모든 것이 문자열(String Buffer)인데, 만약 생긴게 json이라면 javascript 오브젝트로 변경함
+		}).done(function(resp){
+			alert("회원수정이 완료되었습니다.");
 			//console.log(resp);
 			location.href ="/";
 		}).fail(function(error){

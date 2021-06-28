@@ -68,7 +68,9 @@ public class PrincipalDetail implements UserDetails{
 //			
 //			@Override
 //			public String getAuthority() {
-//
+//wwwww
+		
+		
 //				//role은 회원 타입을 말함. RoleType class 참고
 //				return "ROLE_"+user.getRole(); //스프링 규칙상 ROLE을 리턴할때 ROLE_ 을 붙여야 한다.
 //			}
